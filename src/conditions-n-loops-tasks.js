@@ -146,8 +146,62 @@ function convertToRomanNumerals(num) {
  *  '10,5'    => 'one zero point five'
  *  '1950.2'  => 'one nine five zero point two'
  */
-function convertNumberToString(/* numberStr */) {
-  throw new Error('Not implemented');
+function convertNumberToString(numberStr) {
+  let result = '';
+  let index = 0;
+
+  if (numberStr[index] === '-') {
+    result += 'minus';
+    index += 1;
+  }
+
+  while (index < numberStr.length) {
+    const char = numberStr[index];
+    if (index > 0) result += ' ';
+
+    switch (char) {
+      case '.':
+      case ',':
+        result += 'point';
+        break;
+      case '0':
+        result += 'zero';
+        break;
+      case '1':
+        result += 'one';
+        break;
+      case '2':
+        result += 'two';
+        break;
+      case '3':
+        result += 'three';
+        break;
+      case '4':
+        result += 'four';
+        break;
+      case '5':
+        result += 'five';
+        break;
+      case '6':
+        result += 'six';
+        break;
+      case '7':
+        result += 'seven';
+        break;
+      case '8':
+        result += 'eight';
+        break;
+      case '9':
+        result += 'nine';
+        break;
+      default:
+        break;
+    }
+
+    index += 1;
+  }
+
+  return result;
 }
 
 /**
@@ -162,8 +216,14 @@ function convertNumberToString(/* numberStr */) {
  *  '0123210'   => true
  *  'qweqwe'    => false
  */
-function isPalindrome(/* str */) {
-  throw new Error('Not implemented');
+function isPalindrome(str) {
+  let index = 0;
+  const { length } = str;
+  while (index < length / 2) {
+    if (str[index] !== str[length - index - 1]) return false;
+    index += 1;
+  }
+  return true;
 }
 
 /**
@@ -180,9 +240,16 @@ function isPalindrome(/* str */) {
  *  'qwerty', 'Q'     => -1
  *  'qwerty', 'p'     => -1
  */
-function getIndexOf(/* str, letter */) {
-  throw new Error('Not implemented');
+function getIndexOf(str, letter) {
+  let index = 0;
+  const { length } = str;
+  while (index < length) {
+    if (str[index] === letter) return index;
+    index += 1;
+  }
+  return -1;
 }
+getIndexOf('qwerty', 'p');
 
 /**
  * Checks if a number contains a specific digit.
