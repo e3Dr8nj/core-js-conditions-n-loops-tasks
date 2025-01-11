@@ -492,8 +492,47 @@ function sortByAsc(arr) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(/* str, iterations */) {
-  throw new Error('Not implemented');
+/**
+ * Shuffles characters in a string so that the characters with an odd index are moved to the end of the string at each iteration.
+ * Take into account that the string can be very long and the number of iterations is large. Consider how you can optimize your solution.
+ * Usage of Array class methods is not allowed in this task.
+ *
+ * @param {string} str - The string to shuffle.
+ * @param {number} iterations - The number of iterations to perform the shuffle.
+ * @return {string} The shuffled string.
+ *
+ * @example:
+ *  '012345', 1 => '024135'
+ *  'qwerty', 1 => 'qetwry'
+ *  '012345', 2 => '024135' => '043215'
+ *  'qwerty', 2 => 'qetwry' => 'qtrewy'
+ *  '012345', 3 => '024135' => '043215' => '031425'
+ *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
+ */
+function shuffleChar(str, iterations) {
+  const { length } = str;
+  if (length === 0) return str;
+
+  const normalizedIterations =
+    iterations >= length ? iterations % (length === 1 ? 1 : 2) : iterations;
+  let result = str;
+
+  for (let i = 0; i < normalizedIterations; i += 1) {
+    let newResult = '';
+    for (let j = 0; j < length; j += 1) {
+      if (j % 2 === 0) {
+        newResult += result[j];
+      }
+    }
+    for (let j = 0; j < length; j += 1) {
+      if (j % 2 !== 0) {
+        newResult += result[j];
+      }
+    }
+    result = newResult;
+  }
+
+  return result;
 }
 
 /**
@@ -513,8 +552,56 @@ function shuffleChar(/* str, iterations */) {
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+function getNearestBigger(number) {
+  const digits = [];
+  let n = number;
+  while (n > 0) {
+    digits.push(n % 10);
+    n = Math.floor(n / 10);
+  }
+  const len = digits.length;
+  let failIndex = 0;
+  let failNumber = 0;
+  let lasts = [];
+  for (let i = 0; i < len; i += 1) {
+    if (digits[i] > digits[i + 1]) {
+      failIndex = i + 1;
+      lasts.push(digits[i]);
+      lasts.push(digits[i + 1]);
+      failNumber = digits[i + 1];
+      break;
+    } else {
+      lasts.push(digits[i]);
+    }
+  }
+  if (failIndex === 0) return number;
+  let base = Math.floor(number / 10 ** (failIndex + 1)) * 10 ** (failIndex + 1);
+
+  const changer = [];
+  const changerLost = [];
+  lasts
+    .sort((a, b) => a - b)
+    .forEach((el) => {
+      if (el > failNumber) {
+        changer.push(el);
+      } else {
+        changerLost.push(el);
+      }
+    });
+
+  base += changer.shift() * 10 ** failIndex;
+  lasts = [...changer, ...changerLost];
+
+  let lastsLen = lasts.length;
+  lasts
+    .sort((a, b) => a - b)
+    .forEach((el) => {
+      base += el * 10 ** (lastsLen - 1);
+
+      lastsLen -= 1;
+    });
+
+  return base;
 }
 
 module.exports = {
